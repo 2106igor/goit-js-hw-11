@@ -125,3 +125,20 @@ background-color: #fff;
       transform: rotate(360deg);
   }
   } 
+  .load-more {
+    margin-top: 32px;
+    margin-bottom: 44px;
+    margin-right: auto;
+    margin-left: auto;
+    border-radius: 8px;
+    width: 125px;
+    height: 40px;
+    background-color: #4E75FF;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 1.5;
+    letter-spacing: 0.04em;
+    color: #fff;
+    border: none;
+  }
