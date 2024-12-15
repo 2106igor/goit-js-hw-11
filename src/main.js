@@ -1,5 +1,7 @@
 import { fetchImages } from './js/pixabay-api';
 import { renderGallery, initializeLightbox, smoothScroll } from './js/render-functions';
+import 'izitoast/dist/css/iziToast.min.css';
+import iziToast from 'izitoast';
 
 const searchForm = document.querySelector('#search-form');
 const gallery = document.querySelector('.gallery');
@@ -21,7 +23,11 @@ const onSearchSubmit = async (event) => {
 
   searchQuery = event.currentTarget.elements.searchQuery.value.trim();
   if (!searchQuery) {
-    alert('Please enter a search query.');
+    iziToast.warning({
+      title: 'Warning',
+      message: 'Please enter a search query.',
+      position: 'topRight',
+    });
     return;
   }
 
@@ -32,10 +38,23 @@ const onSearchSubmit = async (event) => {
 
   try {
     const data = await fetchImages(searchQuery, currentPage);
+    if (data.hits.length === 0) {
+      iziToast.error({
+        title: 'Error',
+        message: 'No images found. Try another search query.',
+        position: 'topRight',
+      });
+      return;
+    }
+
     renderImages(data.hits);
     handleLoadMoreVisibility(data.totalHits);
   } catch (error) {
-    alert(error.message);
+    iziToast.error({
+      title: 'Error',
+      message: 'Failed to fetch images. Please try again later.',
+      position: 'topRight',
+    });
   }
 };
 
@@ -51,7 +70,11 @@ const onLoadMore = async () => {
     handleLoadMoreVisibility(data.totalHits);
     smoothScroll();
   } catch (error) {
-    alert(error.message);
+    iziToast.error({
+      title: 'Error',
+      message: 'Failed to fetch more images. Please try again later.',
+      position: 'topRight',
+    });
   }
 };
 
@@ -78,7 +101,11 @@ const handleLoadMoreVisibility = (totalHits) => {
   const totalLoaded = currentPage * 15; // 15 - количество на страницу
   if (totalLoaded >= totalHits) {
     loadMoreBtn.style.display = 'none';
-    alert("We're sorry, but you've reached the end of search results.");
+    iziToast.info({
+      title: 'Info',
+      message: "We're sorry, but you've reached the end of search results.",
+      position: 'topRight',
+    });
   } else {
     loadMoreBtn.style.display = 'block';
   }
